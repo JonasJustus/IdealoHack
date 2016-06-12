@@ -27,64 +27,64 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
   BackandProvider.setAnonymousToken('828a4c68-8f1f-42cc-8517-ad95dbfe4844');
 })
 
-.controller('AppCtrl', function($scope, TodoService) {
-  $scope.todos = [];
+.controller('AppCtrl', function($scope, listService) {
+  $scope.lists = [];
   $scope.input = {};
- 
-  function getAllTodos() {
-    TodoService.getTodos()
+
+  function getAlllists() {
+    listService.getlists()
     .then(function (result) {
-      $scope.todos = result.data.data;
+      $scope.lists = result.data.data;
     });
   }
- 
-  $scope.addTodo = function() {
-    TodoService.addTodo($scope.input)
+
+  $scope.addlist = function() {
+    listService.addlist($scope.input)
     .then(function(result) {
       $scope.input = {};
-      // Reload our todos, not super cool
-      getAllTodos();
+      // Reload our lists, not super cool
+      getAlllists();
     });
   }
- 
-  $scope.deleteTodo = function(id) {
-    TodoService.deleteTodo(id)
+
+  $scope.deletelist = function(id) {
+    listService.deletelist(id)
     .then(function (result) {
-      // Reload our todos, not super cool
-      getAllTodos();
+      // Reload our lists, not super cool
+      getAlllists();
     });
   }
- 
-  getAllTodos();
+
+  getAlllists();
 })
 
-.service('TodoService', function ($http, Backand) {
+.service('listService', function ($http, Backand) {
   var baseUrl = '/1/objects/';
-  var objectName = 'todos/';
- 
+  var objectName = 'lists/';
+
   function getUrl() {
     return Backand.getApiUrl() + baseUrl + objectName;
   }
- 
+
   function getUrlForId(id) {
     return getUrl() + id;
   }
- 
-  getTodos = function () {
+
+  getlists = function () {
     return $http.get(getUrl());
   };
- 
-  addTodo = function(todo) {
-    return $http.post(getUrl(), todo);
+
+  addlist = function(list) {
+    return $http.post(getUrl(), list);
   }
- 
-  deleteTodo = function (id) {
+
+  deletelist = function (id) {
     return $http.delete(getUrlForId(id));
   };
- 
+
   return {
-    getTodos: getTodos,
-    addTodo: addTodo,
-    deleteTodo: deleteTodo
+    getlists: getlists,
+    addlist: addlist,
+    deletelist: deletelist
   }
 });
